@@ -39,10 +39,11 @@ const updateForm = () => {
 const handleToggleErrorMessage = (errorStatus) => {};
 
 const handleSubmit = (event) => {
-  event.preventDefault();
+  event.preventDefault(); //prevents default submit default of form (refresh the page)
   console.log(size.value);
-  submitButton.disabled = true;
-
+  submitButton.disabled = true; 
+// at this point we've made sure that all default behaviours are stopped for a while
+// so that we can collect data from the form itself to prep it to send to the backend
   const data = {
     order: order.value,
     size: size.value,
@@ -55,7 +56,10 @@ const handleSubmit = (event) => {
     postcode: postcode.value,
     country: country.value,
   };
-
+  /*
+here we've collected data from form and put it all in a dataobject; at this point
+we're ready to send data to back end
+  */
   fetch('/order', {
     method: 'POST',
     body: JSON.stringify(data),
@@ -64,8 +68,9 @@ const handleSubmit = (event) => {
       'Content-Type': 'application/json',
     },
   })
-    .then((res) => res.json())
+    .then((res) => res.json()) 
     .then((data) => {
+      console.log("this is backend data", data);
       const { status, error } = data;
       if (status === 'success') {
         window.location.href = '/order-confirmed';
@@ -76,3 +81,29 @@ const handleSubmit = (event) => {
       }
     });
 };
+
+/*
+// converting json u got from BE to a regular JS object
+you have to wait a bit for this ^ to work, when its done, you start a new then
+
+so the second then(data) uses a data thats the res of the res.json
+when you're destructuring, you're desctructuring the result of res.json
+
+res.json converts json from backend to a regular javascript object and then puts it in a 
+variable you name it here, named here data
+*/
+
+/*
+the body tells us the request im sending back to my backend; a fetch is making a request
+to a backend server; this req has a body property, therefore you can do 
+req.body
+and this contains all the data from the form in json format
+before we get to .then it jusmps back to back end, which takes us to the backend
+where we do object destructuring
+
+then once those tests are done, we go back to .then for our response
+res.json is our response; we turn it into a javascript object line 68
+we work with this object
+and either change the url on front end to order confirmed page
+or disable submit button and display an error
+*/
