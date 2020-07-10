@@ -42,21 +42,15 @@ express()
       if (stock.bottles < 1) {
         response = { status: "error", error: "unavailable" };
       }
-    }
-
-    else if (order === "socks") {
+    } else if (order === "socks") {
       if (stock.socks < 1) {
         response = { status: "error", error: "unavailable" };
       }
-    }
-
-    else if (order === "shirt") {
+    } else if (order === "shirt") {
       if (stock.shirt["size"] < 1) {
         response = { status: "error", error: "unavailable" };
       }
-    }
-
-    else if (country !== "Canada") {
+    } else if (country !== "Canada") {
       response = { status: "error", error: "underliverable" };
     }
 
@@ -69,18 +63,22 @@ express()
         return customer.email === email;
       })
     ) {
-        response = ({ status: "error", error: "repeat-customer" });
+      response = { status: "error", error: "repeat-customer" };
     }
-    
+
     res.json(response);
+  })
+
+  .get("/order-confirmed", (req, res) => {
+    res.render("./views/index");
   })
 
   .get("*", (req, res) => res.send("Dang. 404."))
   .listen(8000, () => console.log(`Listening on port 8000`));
 
-  // .get('/order-confirmed', (req, res) => {
-  //   res.render("/order-confirmed.html");
-  // })
+// .get('/order-confirmed', (req, res) => {
+//   res.render("/order-confirmed.html");
+// })
 /*
 we will now destructuring, which does req.body.order, size, etc
 this post is responsible for any post made to this endpiont, we're making a postreq to 

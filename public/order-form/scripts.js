@@ -73,7 +73,7 @@ we're ready to send data to back end
       console.log("this is backend data", data);
       const { status, error } = data;
       if (status === "success") {
-        window.location.href = "/order-confirmed";
+        window.location.href = "./views/index";
         // remove this and rerender
       } else if (error) {
         submitButton.disabled = false;
